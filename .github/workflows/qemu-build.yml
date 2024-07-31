@@ -8,7 +8,7 @@ jobs:
   query-latest-tag:
       runs-on: ubuntu-latest
       outputs:
-        latest_tag: ${{ fromJson( steps.qemu.outputs.tags ) }}
+        latest_tag: ${{steps.qemu.outputs.tags}}
       steps:
       - id: qemu
         uses: hakwerk/gha-git-repo-tags@main
@@ -19,5 +19,8 @@ jobs:
   check-build-condition:
     runs-on: ubuntu-latest
     needs: query-latest-tag
+    strategy:
+      matrix:
+        tag: ${{ fromJson( needs.query-latest-tag.outputs.latest_tag ) }}
     steps:
-      - run: echo ${{needs.query-latest-tag.outputs.latest_tag}}
+      - run: echo ${{matrix.tag}}
