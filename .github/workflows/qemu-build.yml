@@ -8,7 +8,7 @@ jobs:
   query-latest-tag:
       runs-on: ubuntu-latest
       outputs:
-        latest_tag: ${{ steps.qemu.outputs.tags }}
+        latest_tag: ${{ fromJson( steps.qemu.outputs.tags ) }}
       steps:
       - id: qemu
         uses: hakwerk/gha-git-repo-tags@main
