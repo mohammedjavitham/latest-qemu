@@ -1,0 +1,23 @@
+name: Build qemu-system-arm
+
+on:
+  push:
+    branches: [ "master", "ci-test" ]
+
+jobs:
+  query-latest-tag:
+      runs-on: ubuntu-latest
+      outputs:
+        latest_tag: ${{ steps.qemu.outputs.tags }}
+      steps:
+      - id: qemu
+        uses: hakwerk/gha-git-repo-tags@main
+        with:
+          repository: qemu/qemu
+          limit: 1
+
+  check-build-condition:
+    runs-on: ubuntu-latest
+    needs: query-latest-tag
+    steps:
+      - run: echo ${{needs.query-latest-tag.outputs.latest_tag}}
