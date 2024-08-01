@@ -33,7 +33,7 @@ jobs:
           repo: ${{ env.GITHUB_REPOSITORY }}
           
   build:
-    if: ${{ contains(needs.check-build-condition.outputs.tag, 'false')}}
+    if: ${{ contains(needs.check-build-condition.outputs.skip, 'false')}}
     permissions:
       contents: write
     runs-on: ubuntu-latest
