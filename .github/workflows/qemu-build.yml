@@ -16,7 +16,7 @@ jobs:
           limit: 1
 
       - name: Tag check
-        run: echo sed -e 's/^.//' -e 's/.$//' << ${{ steps.qemu.outputs.tags }}
+        run: echo ${{ steps.qemu.outputs.tags }} | sed -e 's/^.//' -e 's/.$//'
 
 
       - name: 'Check build condition'
