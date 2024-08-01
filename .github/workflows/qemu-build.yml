@@ -16,7 +16,8 @@ jobs:
           limit: 1
 
       - name: Tag check
-        run: echo ${{ steps.qemu.outputs.tags }} | sed -e 's/^.//' -e 's/.$//'
+        run: echo "tagtest=$(echo ${{ steps.qemu.outputs.tags }} | sed -e 's/^.//' -e 's/.$//')" >> $GITHUB_ENV
+      - run: echo ${{ env.tagtest }}
 
 
       - name: 'Check build condition'
