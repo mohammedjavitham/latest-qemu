@@ -1,12 +1,14 @@
 name: Build qemu-system-arm
 
 on:
-  push:
-    branches: [ "master", "ci-test" ]
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   qemu-build:
       runs-on: ubuntu-latest
+      permissions:
+        contents: write
       steps:
       - name: 'Fetch tags'
         id: qemu
