@@ -7,9 +7,6 @@ on:
 jobs:
   qemu-build:
       runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          tag: ${{ fromJson( steps.qemu.outputs.tags ) }}
       steps:
       - name: 'Check latest tag'
         id: qemu
@@ -19,7 +16,7 @@ jobs:
           limit: 1
 
       - name: Tag check
-        run: echo ${{ matrix.tag }}
+        run: echo ${{ fromJson(${{steps.qemu.outputs.tags}})}}
 
 
       - name: 'Check build condition'
