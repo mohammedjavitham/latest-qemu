@@ -16,7 +16,7 @@ jobs:
           limit: 1
 
       - name: Tag check
-        run: echo ${{ fromJson( steps.qemu.outputs.tags ) }}
+        run: echo ${{ join( steps.qemu.outputs.tags ) }}
 
 
       - name: 'Check build condition'
@@ -25,14 +25,6 @@ jobs:
         with: 
           tag: ${{ env.tagtest }}
           repo: ${{ env.GITHUB_REPOSITORY }}
-
-      - name: 'build skipped'
-        if: ${{ contains(steps.qemu.outputs.exists, 'false')}}
-        run: echo ${{ fromJson( steps.qemu.outputs.tags ) }}
-
-      - name: 'build started'
-        if: ${{ contains(steps.qemu.outputs.exists, 'true')}}
-        run: echo ${{ fromJson( steps.qemu.outputs.tags ) }}
           
   # query-latest-tag:
   #     runs-on: ubuntu-latest
