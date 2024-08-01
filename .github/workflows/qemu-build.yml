@@ -15,11 +15,15 @@ jobs:
           repository: qemu/qemu
           limit: 1
 
+      - name: Tag check
+        run: echo "tag=${{ fromJson( steps.qemu.outputs.tags ) }}" >> $GITHUB_ENV
+
+
       - name: 'Check build condition'
         uses: mukunku/tag-exists-action@v1.6.0
         id: check-tag
         with: 
-          tag: ${{ fromJson( steps.qemu.outputs.tags ) }}
+          tag: ${{ env.tagtest }}
           repo: ${{ env.GITHUB_REPOSITORY }}
 
       - name: 'build skipped'
