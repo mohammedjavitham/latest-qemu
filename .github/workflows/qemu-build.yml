@@ -43,6 +43,7 @@ jobs:
           ref: ${{ env.latest-tag }}
     
       - name: 'Build'
+        if: ${{ contains(env.skip-build, 'false')}}
         run: | 
           mkdir $GITHUB_WORKSPACE/output && \
           ./configure \
@@ -64,6 +65,7 @@ jobs:
           make install
 
       - name: 'Make release'
+        if: ${{ contains(env.skip-build, 'false')}}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{needs.check-build-condition.outputs.tag}}
