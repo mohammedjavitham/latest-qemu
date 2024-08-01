@@ -37,39 +37,42 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-build-condition
     steps:
-      - run: touch $GITHUB_WORKSPACE/test
-      # - uses: awalsh128/cache-apt-pkgs-action@latest
-      #   with:
-      #     packages: git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build libslirp-dev
+    #   - uses: awalsh128/cache-apt-pkgs-action@latest
+    #     with:
+    #       packages: git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build libslirp-dev
 
-      # - uses: actions/checkout@v4
-      #   with:
-      #     repository: 'qemu/qemu'
-      #     submodules: 'true'
+    #   - uses: actions/checkout@v4
+    #     with:
+    #       repository: 'qemu/qemu'
+    #       submodules: 'true'
           
-      # - run: | 
-      #     mkdir $GITHUB_WORKSPACE/output && \
-      #     ./configure \
-      #     --target-list=aarch64-softmmu \
-      #     --enable-slirp \
-      #     --disable-spice \
-      #     --disable-docs \
-      #     --disable-gtk \
-      #     --disable-smartcard \
-      #     --disable-usb-redir \
-      #     --disable-libusb \
-      #     --disable-sdl \
-      #     --disable-gnutls \
-      #     --disable-vte \
-      #     --disable-vnc \
-      #     --disable-werror \
-      #     --prefix=$GITHUB_WORKSPACE/output && \
-      #     make -j$(nproc) && \
-      #     make install
-
+    #   - run: | 
+    #       mkdir $GITHUB_WORKSPACE/output && \
+    #       ./configure \
+    #       --target-list=aarch64-softmmu \
+    #       --enable-slirp \
+    #       --disable-spice \
+    #       --disable-docs \
+    #       --disable-gtk \
+    #       --disable-smartcard \
+    #       --disable-usb-redir \
+    #       --disable-libusb \
+    #       --disable-sdl \
+    #       --disable-gnutls \
+    #       --disable-vte \
+    #       --disable-vnc \
+    #       --disable-werror \
+    #       --prefix=$GITHUB_WORKSPACE/output && \
+    #       make -j$(nproc) && \
+    #       make install
+    
+      - run: | 
+          echo $GITHUB_WORKSPACE/output && \
+          echo "test" > Release.txt && \
+          ls -lha
+  
       - uses: softprops/action-gh-release@v2
         with:
-          tag_name: ci-test
-          # tag_name: ${{needs.check-build-condition.outputs.tag}}
+          tag_name: ${{needs.check-build-condition.outputs.tag}}
           files: |
-           $GITHUB_WORKSPACE/*
+           Release.txt
