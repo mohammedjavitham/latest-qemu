@@ -76,5 +76,6 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{needs.check-build-condition.outputs.tag}}
+          fail_on_unmatched_files: 'true'
           files: |
            output/*
