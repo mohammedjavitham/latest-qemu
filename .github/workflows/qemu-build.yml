@@ -16,7 +16,7 @@ jobs:
           limit: 1
 
       - name: Tag check
-        run: echo "tag=${{ fromJson( steps.qemu.outputs.tags ) }}" >> $GITHUB_ENV
+        run: echo "tag="${{ fromJson( steps.qemu.outputs.tags ) }} >> $GITHUB_ENV
 
 
       - name: 'Check build condition'
