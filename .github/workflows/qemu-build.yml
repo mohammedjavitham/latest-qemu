@@ -77,4 +77,4 @@ jobs:
         with:
           tag_name: ${{needs.check-build-condition.outputs.tag}}
           files: |
-           Release.txt
+           $GITHUB_WORKSPACE/output/*
