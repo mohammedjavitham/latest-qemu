@@ -30,8 +30,10 @@ jobs:
 
       - name: 'Configure build dep'
         if: ${{ contains(env.skip-build, 'false')}}
-        run: | 
-          apt-get install git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build libslirp-dev
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build libslirp-dev
+          version: 1.0
 
       - name: 'Checkout qemu/qemu @ ${{ env.latest-tag }}'
         if: ${{ contains(env.skip-build, 'false')}}
