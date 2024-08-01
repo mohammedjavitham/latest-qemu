@@ -24,9 +24,11 @@ jobs:
 
       - name: 'build skipped'
         if: ${{ contains(steps.qemu.outputs.exists, 'false')}}
+        run: echo ${{ fromJson( steps.qemu.outputs.tags ) }}
 
       - name: 'build started'
         if: ${{ contains(steps.qemu.outputs.exists, 'true')}}
+        run: echo ${{ fromJson( steps.qemu.outputs.tags ) }}
           
   # query-latest-tag:
   #     runs-on: ubuntu-latest
