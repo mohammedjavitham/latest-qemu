@@ -39,9 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-build-condition
     steps:
-      - uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build libslirp-dev
+      - run: apt update && apt install git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build libslirp-dev
 
       - uses: actions/checkout@v4
         with:
