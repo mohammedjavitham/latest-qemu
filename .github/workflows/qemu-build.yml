@@ -31,8 +31,7 @@ jobs:
       - name: 'Configure build dep'
         if: ${{ contains(env.skip-build, 'false')}}
         run: | 
-          apt update && \
-          apt install git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build libslirp-dev
+          apt-get install git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build libslirp-dev
 
       - name: 'Checkout qemu/qemu @ ${{ env.latest-tag }}'
         if: ${{ contains(env.skip-build, 'false')}}
