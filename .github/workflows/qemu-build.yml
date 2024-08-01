@@ -16,9 +16,7 @@ jobs:
           limit: 1
 
       - name: Tag check
-        env:
-          tag: ${{ fromJson(steps.qemu.outputs.tags) }}
-        run: echo ${{ env.tag }}
+        run: echo ${{ steps.qemu.outputs.tags }}
 
 
       - name: 'Check build condition'
