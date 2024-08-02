@@ -1,77 +1,65 @@
-name: Build qemu-system-arm
-
-on:
+name: Build qemu-system-aarch64
+'on':
   schedule:
-    - cron: "0 0 * * *"
-
+    - cron: 0 0 * * *
 jobs:
   qemu-build:
-      runs-on: ubuntu-latest
-      permissions:
-        contents: write
-      steps:
-      - name: 'Fetch tags'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Fetch tags
         id: qemu
         uses: hakwerk/gha-git-repo-tags@main
         with:
           repository: qemu/qemu
           limit: 1
-
-      - name: 'Parse tags'
-        run: echo "latest-tag=$(echo ${{ steps.qemu.outputs.tags }} | sed -e 's/^.//' -e 's/.$//')" >> $GITHUB_ENV
-
-      - name: 'Check build condition'
+      - name: Parse tags
+        run: >-
+          echo "latest-tag=$(echo ${{ steps.qemu.outputs.tags }} | sed -e
+          's/^.//' -e 's/.$//')" >> $GITHUB_ENV
+      - name: Check build condition
         uses: mukunku/tag-exists-action@v1.6.0
         id: check-tag
-        with: 
-          tag: ${{ env.latest-tag }}
-          repo: ${{ env.GITHUB_REPOSITORY }}
-
-      - name: 'Update build condition'
-        run: echo "skip-build=$(echo ${{steps.check-tag.outputs.exists}})" >> $GITHUB_ENV
-
-      - name: 'Configure build dep'
-        if: ${{ contains(env.skip-build, 'false')}}
+        with:
+          tag: '${{ env.latest-tag }}'
+          repo: '${{ env.GITHUB_REPOSITORY }}'
+      - name: Update build condition
+        run: >-
+          echo "skip-build=$(echo ${{steps.check-tag.outputs.exists}})" >>
+          $GITHUB_ENV
+      - name: Configure build dep
+        if: '${{ contains(env.skip-build, ''false'')}}'
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build libslirp-dev
-          version: 1.0
-
+          packages: >-
+            git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build
+            libslirp-dev
+          version: 1
       - name: 'Checkout qemu/qemu @ ${{ env.latest-tag }}'
-        if: ${{ contains(env.skip-build, 'false')}}
+        if: '${{ contains(env.skip-build, ''false'')}}'
         uses: actions/checkout@v4
         with:
-          repository: 'qemu/qemu'
+          repository: qemu/qemu
           submodules: 'true'
-          ref: ${{ env.latest-tag }}
-    
-      - name: 'Build'
-        if: ${{ contains(env.skip-build, 'false')}}
-        run: | 
+          ref: '${{ env.latest-tag }}'
+      - name: Build
+        if: '${{ contains(env.skip-build, ''false'')}}'
+        run: |
           mkdir $GITHUB_WORKSPACE/output && \
           ./configure \
-          --target-list=arm-softmmu \
+          --target-list=aarch64-softmmu \
           --enable-slirp \
-          --disable-spice \
+          --without-default-features \
           --disable-docs \
-          --disable-gtk \
-          --disable-smartcard \
-          --disable-usb-redir \
-          --disable-libusb \
-          --disable-sdl \
-          --disable-gnutls \
-          --disable-vte \
-          --disable-vnc \
-          --disable-werror \
           --prefix=$GITHUB_WORKSPACE/output && \
           make -j$(nproc) && \
           make install
-
-      - name: 'Make release'
-        if: ${{ contains(env.skip-build, 'false')}}
+      - name: Make release
+        if: '${{ contains(env.skip-build, ''false'')}}'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.latest-tag }}
+          tag_name: '${{ env.latest-tag }}'
           fail_on_unmatched_files: 'true'
           files: |
-           output/bin/qemu-system-arm
+            output/bin/qemu-system-aarch64
