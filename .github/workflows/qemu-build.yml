@@ -52,14 +52,26 @@ jobs:
           --enable-slirp \
           --without-default-features \
           --disable-docs \
+          --disable-qom-cast-debug \
+          --disable-werror \
+          --enable-strip \
           --prefix=$GITHUB_WORKSPACE/output && \
           make -j$(nproc) && \
           make install
+      - name: Prepare release
+        if: '${{ contains(env.skip-build, ''false'')}}'
+        run: >-
+          base_url="https://wiki.qemu.org/ChangeLog" && url=$(echo ${{
+          env.latest-tag }} | awk -F- '{print $1}' | awk -Fv '{print $2}' | awk
+          -F. '{print $1"."$2}') && if wget -q --method=HEAD $base_url"/"$url;
+          then echo "changelog-url="$base_url"/"$url > $GITHUB_ENV; else echo
+          "changelog-url="$base_url >> $GITHUB_ENV; fi
       - name: Make release
         if: '${{ contains(env.skip-build, ''false'')}}'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.0.8
         with:
           tag_name: '${{ env.latest-tag }}'
+          body: 'Full Changelog: ${{ env.changelog-url }}'
           fail_on_unmatched_files: 'true'
           files: |
             output/bin/qemu-system-aarch64
