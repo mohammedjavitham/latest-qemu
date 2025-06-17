@@ -30,7 +30,7 @@ jobs:
         id: qemu
         uses: hakwerk/gha-git-repo-tags@main
         with:
-          repository: ${{ github.event.inputs.repo }}
+          repository: ${{ github.event.inputs.repo || 'qemu/qemu' }}
           limit: 1
       - name: Parse tags
         run: >
@@ -57,11 +57,11 @@ jobs:
             git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build
             libslirp-dev
           version: 1
-      - name: Checkout ${{ github.event.inputs.repo }} @ ${{ env.latest-tag }}
+      - name: Checkout ${{ github.event.inputs.repo || 'qemu/qemu' }} @ ${{ env.latest-tag }}
         if: ${{ contains(env.skip-build, 'false') }}
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.inputs.repo }}
+          repository: ${{ github.event.inputs.repo || 'qemu/qemu' }}
           submodules: "true"
           ref: ${{ env.latest-tag }}
       - name: Build
@@ -69,7 +69,7 @@ jobs:
         run: |
           mkdir $GITHUB_WORKSPACE/output && \
           ./configure \
-          --target-list=${{ github.event.inputs.target-list }} \
+          --target-list=${{ github.event.inputs.target-list || 'aarch64-softmmu,arm-softmmu' }} \
           --enable-slirp \
           --without-default-features \
           --disable-docs \
