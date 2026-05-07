@@ -13,12 +13,12 @@ on:
       repo:
         description: QEMU repository to build
         required: false
-        default: qemu/qemu
+        default: Nuvoton-Israel/qemu
         type: string
       target-list:
         description: QEMU build targets
         required: false
-        default: aarch64-softmmu,arm-softmmu
+        default: aarch64-softmmu
         type: string
 jobs:
   qemu-build:
@@ -55,7 +55,7 @@ jobs:
         with:
           packages: |
             git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev ninja-build
-            libslirp-dev libnettle-dev
+            libslirp-dev libnettle-dev nettle-dev libusb-1.0-0-dev
           version: 1
       - name: Checkout ${{ github.event.inputs.repo || 'qemu/qemu' }} @ ${{ env.latest-tag }}
         if: ${{ contains(env.skip-build, 'false') }}
