@@ -22,7 +22,7 @@ on:
         type: string
 jobs:
   qemu-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
@@ -76,6 +76,9 @@ jobs:
           --disable-qom-cast-debug \
           --disable-werror \
           --enable-strip \
+          --enable-nettle \
+          --disable-gnutls \
+          --enable-libusb \
           --prefix=$GITHUB_WORKSPACE/output && \
           make -j$(nproc) && \
           make install && \
